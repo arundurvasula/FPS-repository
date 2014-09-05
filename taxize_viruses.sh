@@ -1,0 +1,27 @@
+#!/bin/bash
+# Documentation:
+# use: taxize_viruses.sh <blast.csv> <contigs.fa> <blast description column number>
+
+#set -e
+#set -u
+
+blast=$1
+contigs=$2
+desc_col=$3
+
+echo '##################################################'
+echo '### Getting taxonomy information for '$blast' ###'
+echo '##################################################'
+
+# create directory for all the new files
+mkdir ./$blast.tax
+cp $blast ./$blast.tax
+cd ./$blast.tax
+
+#grab only raw file name
+temp_blast=${blast##*/}
+blast_no_file_ending=${temp_blast%%.*}
+clean_output=$blast_no_file_ending-clean.csv
+awk -F"," -v desc_col=$desc_col '{print $1","$desc_col}' $blast | tr -d \" > $clean_output
+taxize.r $clean_output ../$contigs
+cp $clean_output-* ../
