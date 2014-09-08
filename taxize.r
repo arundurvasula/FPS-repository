@@ -9,7 +9,7 @@ require("seqinr")
 
 ca <- commandArgs(trailingOnly=TRUE)
 
-blast <- read.table(file=ca[1], sep=",", header=FALSE, fill=FALSE, quote="")
+blast <- read.table(file=ca[1], sep="\t", header=FALSE, fill=FALSE, quote="")
 contig.file <- read.fasta(file=ca[2])
 
 blast$V2 <- gsub(".*\\[(.*)\\].*", "\\1", blast$V2)
@@ -24,7 +24,7 @@ blast.virus["sequence"] <- unlist(sequence)
 families <- tax_name(query=blast.virus$V2,get='family', db='ncbi')
 blast.virus["families"] <- families
 
-write.table(blast.virus[c("V1", "lengths", "V2", "families", "sequence")], file=paste(ca[1], "-families.csv", sep=""), row.names=FALSE, sep=",", col.names=c("Contig name", "Length", "Virus name", "Virus family", "Sequence"))
+write.table(blast.virus[c("V1", "lengths", "V2", "families", "sequence")], file=paste(ca[1], "-families.tsv", sep=""), row.names=FALSE, sep="\t", col.names=c("Contig name", "Length", "Virus name", "Virus family", "Sequence"))
 png(file=paste(ca[1],"-graph", sep=""), width=1000, height=500)
 
 vir.families <- table(blast.virus$families)

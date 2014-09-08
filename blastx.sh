@@ -1,6 +1,6 @@
 #!/bin/bash
 # Documentation:
-# -todo
+# -blastx.sh <contigs.fa>
 
 set -e
 set -u
@@ -27,8 +27,8 @@ contigs=(`find ./$sample_no_file_ending.*.fa -type f`)
 for file in ${contigs[@]}
 do
     filename=${file##*/}
-    time blastx -db nr -query $file -evalue 10 -matrix 'BLOSUM62' -word_size 3 -gapopen 11 -gapextend 1 -max_target_seqs 3 -outfmt "10 qseqid qlen sseqid evalue bitscore sskingdoms stitle sblastnames salltitles scomnames sscblyinames" -out ./$filename-blast.csv -num_threads 2 -seg "yes" &
+    time blastx -db nr -query $file -evalue 10 -matrix 'BLOSUM62' -word_size 3 -gapopen 11 -gapextend 1 -max_target_seqs 3 -outfmt "6 qseqid qlen sseqid evalue bitscore sskingdoms stitle sblastnames salltitles scomnames sscblyinames" -out ./$filename-blast.tsv -num_threads 2 -seg "yes" &
 done
 wait
-cat ./$sample_no_file_ending.*.fa-blast.csv > ./$sample-blast.csv
-cp $sample-blast.csv ../
+cat ./$sample_no_file_ending.*.fa-blast.tsv > ./$sample-blast.tsv
+cp $sample-blast.tsv ../

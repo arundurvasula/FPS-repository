@@ -21,7 +21,7 @@ cd ./$blast.tax
 #grab only raw file name
 temp_blast=${blast##*/}
 blast_no_file_ending=${temp_blast%%.*}
-clean_output=$blast_no_file_ending-clean.csv
-awk -F"," -v desc_col=$desc_col '{print $1","$desc_col}' $blast | tr -d \" > $clean_output
+clean_output=$blast_no_file_ending-clean.tsv
+awk -F"\t" -v desc_col=$desc_col '{print $1"\t"$desc_col}' $blast | tr -d \" > $clean_output
 taxize.r $clean_output ../$contigs
 cp $clean_output-* ../

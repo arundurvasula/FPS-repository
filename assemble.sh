@@ -1,0 +1,29 @@
+#!/bin/bash
+#assemble.sh <reads.fastq.gz>
+set -u
+
+reads=$1
+temp_sample=${reads##*/}
+sample_no_file_ending=${temp_sample%%.*}
+trimmedreads=$sample_no_file_ending-trimmed.fastq.gz
+qualreads=$sample_no_file_ending-qual.fastq
+
+
+#trim adaptors with WGA adaptors
+echo "Trimming adaptors with cutadapt using WGA adaptor sequences"
+cutadapt -a TGTGTTGGGTGTGT \
+    -a TGTGTTGGGTGTGTTTGG \
+    -a TGTGTTGGGTGTGTTTGGTT \
+    -a TGTGTTGGGTGTGTTTGGG \
+    -e 0.1 -O 5 -m 15 \
+    -o $trimmedreads $reads
+
+#remove low quality sequences using the defaults
+echo "Removing low quality sequences with sickle"
+sickle se -f $trimmedreads -t sanger -o $qualreads
+
+mkdir contigs
+echo '##########################'
+echo '### Assembling '$reads' ###'
+echo '##########################'
+idba_ud -r $qualreads -o contigs --mink 29 --maxk 49 --step 2

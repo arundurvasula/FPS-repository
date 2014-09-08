@@ -8,6 +8,8 @@ This repository's scripts assume that the following programs are installed and p
 - IDBA_UD
 - samtools
 - bwa
+- cutadapt
+- sickle
 - R (plus these packages)
     - taxize
     - ggplot2
@@ -23,3 +25,13 @@ Details of the input data are included at the beginning of each script. Scripts 
 
 ## Naming data and results
 There is a naming scheme somewhere out there
+
+## Scripts
+
+###assemble.sh
+
+This script will take raw Illumina reads in fastq.gz format and cut adaptors (WGA) with `cutadapt`, remove low quality sequences with `sickle`, and assemble the reads with `idba_ud`.
+
+###blastx.sh
+
+###taxize_viruses.sh
