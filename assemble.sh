@@ -27,3 +27,4 @@ echo '##########################'
 echo '### Assembling '$reads' ###'
 echo '##########################'
 idba_ud -r $qualreads -o contigs --mink 29 --maxk 49 --step 2
+cp contigs/contig.fa ./
