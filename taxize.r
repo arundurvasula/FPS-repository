@@ -25,7 +25,7 @@ families <- tax_name(query=blast.virus$V2,get='family', db='ncbi')
 blast.virus["families"] <- families
 
 write.table(blast.virus[c("V1", "lengths", "V2", "families", "sequence")], file=paste(ca[1], "-families.tsv", sep=""), row.names=FALSE, sep="\t", col.names=c("Contig name", "Length", "Virus name", "Virus family", "Sequence"))
-png(file=paste(ca[1],"-graph", sep=""), width=1000, height=500)
+png(file=paste(ca[1],"-graph.png", sep=""), width=1000, height=500)
 
 vir.families <- table(blast.virus$families)
 df.vir.families <- data.frame(vir.families)

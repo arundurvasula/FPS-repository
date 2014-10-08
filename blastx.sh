@@ -5,7 +5,8 @@
 set -e
 set -u
 sample=$1
-cores=(`nproc`)
+#cores=(`nproc`)
+cores=8
 
 echo '################################'
 echo '### Running BLAST on '$sample' ###'
