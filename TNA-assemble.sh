@@ -9,7 +9,7 @@ trimmedreads=$sample_no_file_ending-trimmed.fastq.gz
 qualreads=$sample_no_file_ending-qual.fastq
 
 
-trim adaptors with WGA adaptors
+#trim adaptors with WGA adaptors
 echo "Trimming adaptors with cutadapt using TNA adaptor sequences"
 cutadapt -a AGATCGGAAGAGCACACGTC \
     -a AGATCGGAAGAGCGTCGTGT \
@@ -20,9 +20,9 @@ cutadapt -a AGATCGGAAGAGCACACGTC \
 echo "Removing low quality sequences with sickle"
 sickle se -f $trimmedreads -t sanger -o $qualreads
 
-mkdir contigs-$sample_no_file_ending
+#mkdir contigs-$sample_no_file_ending
 echo '##########################'
 echo '### Assembling '$reads' ###'
 echo '##########################'
-idba_ud -r $qualreads -o contigs --mink 29 --maxk 49 --step 2
-cp contigs/contig.fa ./
+idba_ud -r $qualreads -o contigs-$sample_no_file_ending --mink 29 --maxk 49 --step 2
+#cp contigs/contig.fa ./

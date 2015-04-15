@@ -12,8 +12,8 @@ ca <- commandArgs(trailingOnly=TRUE)
 blast <- read.table(file=ca[1], sep="\t", header=FALSE, fill=FALSE, quote="")
 contig.file <- read.fasta(file=ca[2])
 
-blast$V2 <- gsub(".*\\[(.*)\\].*", "\\1", blast$V2)
-blast.virus = subset(blast, grepl("virus", V2))
+blast$V3 <- gsub(".*\\[(.*?)\\].*", "\\1", blast$V3)
+blast.virus = subset(blast, grepl("virus", V3))
 
 blast.virus$V1 <- gsub(" ","_", blast.virus$V1)
 lengths <- getLength(contig.file[blast.virus$V1])
@@ -21,10 +21,22 @@ blast.virus["lengths"] <- lengths
 sequence <- getSequence(contig.file[blast.virus$V1], as.string=TRUE)
 blast.virus["sequence"] <- unlist(sequence)
 
-families <- tax_name(query=blast.virus$V2,get='family', db='ncbi')
+failed.families=F
+# doesn't work. need to try sapply  
+# families <- tryCatch({
+#   tax_name(query=blast.virus$V3,get='family', db='ncbi')
+# }, error = function(err) {
+#   failed.families=T
+#   print(err)
+# })
 blast.virus["families"] <- families
-
-write.table(blast.virus[c("V1", "lengths", "V2", "families", "sequence")], file=paste(ca[1], "-families.tsv", sep=""), row.names=FALSE, sep="\t", col.names=c("Contig name", "Length", "Virus name", "Virus family", "Sequence"))
+if(failed.families) {
+  write.table(blast.virus[c("V1", "lengths", "V2", "V3", "sequence")], file=paste(ca[1], "-families.tsv", sep=""), row.names=FALSE, sep="\t", col.names=c("Contig name", "Length", "Virus name", "E-value", "Sequence"))
+  
+}
+else {
+  write.table(blast.virus[c("V1", "lengths", "V2", "V3", "families", "sequence")], file=paste(ca[1], "-families.tsv", sep=""), row.names=FALSE, sep="\t", col.names=c("Contig name", "Length", "Virus name", "E-value", "Virus family", "Sequence"))
+}
 png(file=paste(ca[1],"-graph.png", sep=""), width=1000, height=500)
 
 vir.families <- table(blast.virus$families)
